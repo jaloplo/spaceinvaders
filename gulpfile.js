@@ -1,6 +1,17 @@
-function defaultTask(cb) {
-    // place code for your default task here
-    cb();
-  }
+function eslint() {
+  const { src } = require('gulp');
+  const eslint = require('gulp-eslint');
+
+  return src(['src/*.js'])
+    .pipe(eslint({
+      allowInlineConfig: false,
+      fix: true,
+      rules: {
+        camelcase: 1
+      }
+    }))
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
+}
   
-  exports.default = defaultTask
+  exports.default = eslint
