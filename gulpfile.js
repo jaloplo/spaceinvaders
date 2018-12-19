@@ -1,5 +1,8 @@
 const { dest, src, series } = require('gulp');
+
+const concat = require('gulp-concat');
 const eslint = require('gulp-eslint');
+const del = require('del');
 const uglyfly = require('gulp-uglyfly')
 
 function lint() {
@@ -15,10 +18,25 @@ function lint() {
     .pipe(eslint.failAfterError());
 }
 
+function cleanTmp() {
+  return del(['./tmp']);
+}
+
+function cleanDist() {
+  return del(['./dist']);
+}
+
 function compress() {
-  return src(['src/*.js'])
+  return src(['./src/*.js'])
     .pipe(uglyfly())
-    .pipe(dest('dist'));
+    .pipe(dest('./tmp/'));
+}
+
+function concatTask() {
+  return src(['./tmp/*.js'])
+    .pipe(concat('spaceinvaders.js'))
+    .pipe(dest('./dist/'));
 }
   
-  exports.default = series(lint, compress);
+  exports.default = series(cleanTmp, cleanDist, lint, compress, concatTask, cleanTmp);
+  exports.clean = series(cleanTmp, cleanDist);
