@@ -1,3 +1,3 @@
-# Boxed Space Invaders
+# Space Invaders
 
-Space Invaders game maded with Matter.js just for fun.
+Space Invaders game made with Matter.js just for fun.
