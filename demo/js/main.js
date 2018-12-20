@@ -1,5 +1,5 @@
-requirejs(['ui/View', 'ui/ScoreDisplay'],
-    function(View, ScoreDisplay) {
+requirejs(['core/Score', 'ui/View', 'ui/ScoreDisplay'],
+    function(Score, View, ScoreDisplay) {
         var Body = Matter.Body,
             Bodies = Matter.Bodies,
             Composite = Matter.Composite,
@@ -32,42 +32,7 @@ requirejs(['ui/View', 'ui/ScoreDisplay'],
                 wireframes: false
             }
         });
-
-
-        // Represent the score of the current session
-        var Score = (function() {
-
-            var that = {
-                create: function(game) {
-                    return {
-                        high: 0,
-                        current: 0,
-                        level: game.level,
-                    };
-                },
-                invader: function(score) {
-                    score.current += 10;
-                    return score;
-                },
-                new: function(score) {
-                    score.current += 100;
-                    return score;
-                },
-                level: function(score, level) {
-                    score.level = level;
-                },
-                reset: function(score) {
-                    if(score.current > score.high) {
-                        score.high = score.current;
-                    }
-                    score.current = 0;
-                    score.level = 1;
-                    return score;
-                }
-            };
-
-            return that;
-        })();
+        
 
         // Represents collisions between objects in the system
         var Collider = (function () {
