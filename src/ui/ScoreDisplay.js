@@ -1,17 +1,15 @@
 define(function() {
     var that = {
-        create: function(highScoreTarget, currentScoreTarget, levelTarget, score) {
+        create: function(view, score) {
             return {
-                currentScoreNode: currentScoreTarget,
-                highScoreNode: highScoreTarget,
-                levelNode: levelTarget,
+                view: view,
                 score: score,
             };
         },
         render: function(display) {
-            display.currentScoreNode.innerHTML = display.score.current;
-            display.highScoreNode.innerHTML = display.score.high;
-            display.levelNode.innerHTML = display.score.level;
+            display.view.current.value.innerHTML = display.score.current;
+            display.view.high.value.innerHTML = display.score.high;
+            display.view.level.value.innerHTML = display.score.level;
         },
     };
 

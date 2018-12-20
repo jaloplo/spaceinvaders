@@ -1,5 +1,5 @@
-requirejs(['ui/ScoreDisplay.js'],
-    function(ScoreDisplay) {
+requirejs(['ui/View', 'ui/ScoreDisplay'],
+    function(View, ScoreDisplay) {
         var Body = Matter.Body,
             Bodies = Matter.Bodies,
             Composite = Matter.Composite,
@@ -399,13 +399,9 @@ requirejs(['ui/ScoreDisplay.js'],
 
         var game = GameWorld.create(engine.world);
 
+        var view = View.create('score');
         var score = Score.create(game);
-        var scoreRender = ScoreDisplay.create(
-            document.getElementsByClassName('high')[0].getElementsByClassName('value')[0],
-            document.getElementsByClassName('current')[0].getElementsByClassName('value')[0],
-            document.getElementsByClassName('level')[0].getElementsByClassName('value')[0],
-            score
-        );
+        var scoreRender = ScoreDisplay.create(view, score);
 
         Events.on(game, 'AfterShipCreation', function(ship) {
             Events.on(game.ship, 'OnHit', function () {
