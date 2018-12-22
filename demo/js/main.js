@@ -436,8 +436,6 @@ requirejs(['core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
             // ship death because of invaders collision
             var vessel = ShipHandler.getShip(game.ship);
             if (Collider.hit(vessel, game.invaders.invaders.bodies)) {
-                var bodies = Collider.hurt(vessel, game.invaders.invaders.bodies);
-
                 Events.trigger(game.ship, 'OnHit', {});
             }
 
