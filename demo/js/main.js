@@ -1,5 +1,5 @@
-requirejs(['core/Score', 'ui/View', 'ui/ScoreDisplay'],
-    function(Score, View, ScoreDisplay) {
+requirejs(['core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
+    function(Score, TimeManager, View, ScoreDisplay) {
         var Body = Matter.Body,
             Bodies = Matter.Bodies,
             Composite = Matter.Composite,
@@ -32,7 +32,7 @@ requirejs(['core/Score', 'ui/View', 'ui/ScoreDisplay'],
                 wireframes: false
             }
         });
-        
+
 
         // Represents collisions between objects in the system
         var Collider = (function () {
@@ -302,26 +302,6 @@ requirejs(['core/Score', 'ui/View', 'ui/ScoreDisplay'],
                     useractions.right = callback;
                     return useractions;
                 },
-            };
-        })();
-
-        // Represent the game time manager
-        var TimeManager = (function () {
-            return {
-                create: function (engine) {
-                    return {
-                        engine: engine,
-                        time: engine.timing.timestamp,
-                    };
-                },
-                elapsed: function (timemanager, seconds) {
-                    var current = engine.timing.timestamp;
-                    return (current - timemanager.time) / 1000 > seconds;
-                },
-                set: function (timemanager) {
-                    timemanager.time = timemanager.engine.timing.timestamp;
-                    return timemanager;
-                }
             };
         })();
 
