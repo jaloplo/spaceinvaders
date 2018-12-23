@@ -1,5 +1,5 @@
-requirejs(['core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
-    function(Score, TimeManager, View, ScoreDisplay) {
+requirejs(['matter.min', 'core/Invader', 'core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
+    function(Matter, Invader, Score, TimeManager, View, ScoreDisplay) {
         var Body = Matter.Body,
             Bodies = Matter.Bodies,
             Composite = Matter.Composite,
@@ -63,34 +63,12 @@ requirejs(['core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
             };
         })();
 
-        // Represents an alian in the system
-        var Invader = (function () {
-            return {
-                create: function (x, y) {
-                    return Bodies.rectangle(x, y, 20, 20, {
-                        label: 'invader'
-                    });
-                },
-            };
-        })();
-
-        // Represents all aliens in the system
-        var Invaders = (function () {
-            return {
-                create: function (x, y, rows, amount) {
-                    return Composites.stack(x, y, amount, rows, 20, 20, function (x, y) {
-                        return Invader.create(x, y);
-                    });
-                },
-            };
-        })();
-
         // Represets the factory for creating invaders sets
         var InvadersFactory = (function () {
             return {
                 get: function (number) {
                     number = number || 0;
-                    return Invaders.create(70, 40, 1 + number, 7);
+                    return Invader.createRow(70, 40, 1 + number, 7);
                 }
             };
         })();
