@@ -63,16 +63,6 @@ requirejs(['matter.min', 'core/Invader', 'core/Score', 'time/TimeManager','ui/Vi
             };
         })();
 
-        // Represets the factory for creating invaders sets
-        var InvadersFactory = (function () {
-            return {
-                get: function (number) {
-                    number = number || 0;
-                    return Invader.createRow(70, 40, 1 + number, 7);
-                }
-            };
-        })();
-
         // Represents a handler to manage aliens
         var InvadersHandler = (function () {
             return {
@@ -292,7 +282,7 @@ requirejs(['matter.min', 'core/Invader', 'core/Score', 'time/TimeManager','ui/Vi
                     };
                 },
                 createInvaders: function(game) {
-                    game.invaders = InvadersHandler.create(InvadersFactory.get(game.level));
+                    game.invaders = InvadersHandler.create(Invader.create(game.level));
                     World.add(game.world, game.invaders);
                     return game;
                 },
