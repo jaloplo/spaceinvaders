@@ -1,5 +1,5 @@
-requirejs(['matter.min', 'core/Core', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
-    function(Matter, Core, TimeManager, View, ScoreDisplay) {
+requirejs(['matter.min', 'core/Core', 'actions/KeyboardListener', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
+    function(Matter, Core, KeyboardListener, TimeManager, View, ScoreDisplay) {
         var Engine = Matter.Engine,
             Events = Matter.Events,
             Query = Matter.Query,
@@ -63,36 +63,6 @@ requirejs(['matter.min', 'core/Core', 'time/TimeManager','ui/View', 'ui/ScoreDis
                 },
                 hurt: function (bullet, bodies) {
                     return Query.region(bodies, bullet.bounds);
-                },
-            };
-        })();
-
-        // Represents a handler for the user keyboard interactions
-        var KeyboardListener = (function () {
-            return {
-                create: function (target) {
-                    var that = {
-                        node: document.body || target,
-                        keys: [],
-                    };
-
-                    that.node.addEventListener('keydown', function(event) {
-                        if(that.keys.indexOf(event.key) < 0) {
-                            that.keys.push(event.key);
-                            Events.trigger(that, 'AfterKeysModification', { keys: that.keys });
-                        }
-                        Events.trigger(that, 'AfterKeyDown', { keys: that.keys });
-                    });
-
-                    that.node.addEventListener('keyup', function(event) {
-                        if(that.keys.indexOf(event.key) > -1) {
-                            that.keys.splice(that.keys.indexOf(event.key), 1);
-                            Events.trigger(that, 'AfterKeysModification', { keys: that.keys });
-                        }
-                        Events.trigger(that, 'AfterKeyUp', { keys: that.keys });
-                    });
-
-                    return that;
                 },
             };
         })();
