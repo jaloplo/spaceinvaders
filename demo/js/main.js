@@ -1,17 +1,14 @@
-requirejs(['matter.min', 'core/Core', 'collisions/Collider', 'actions/Actions', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
-    function(Matter, Core, Collider, Actions, TimeManager, View, ScoreDisplay) {
+requirejs(['matter.min', 'core/Core', 'collisions/Collider', 'actions/Actions', 'time/TimeManager','ui/View', 'ui/ScoreDisplay', 'GameWorld'],
+    function(Matter, Core, Collider, Actions, TimeManager, View, ScoreDisplay, GameWorld) {
         var Engine = Matter.Engine,
             Events = Matter.Events,
-            Query = Matter.Query,
             Render = Matter.Render,
             World = Matter.World;
 
         var Bullet = Core.Bullet,
             BulletHandler = Core.BulletHandler,
-            Invader = Core.Invader,
             InvadersHandler = Core.InvadersHandler,
             Score = Core.Score,
-            Ship = Core.Ship
             ShipHandler = Core.ShipHandler;
 
         var KeyboardListener = Actions.KeyboardListener,
@@ -40,38 +37,38 @@ requirejs(['matter.min', 'core/Core', 'collisions/Collider', 'actions/Actions', 
             }
         });
 
-        var GameWorld = (function() {
-            return {
-                create: function(world) {
-                    return {
-                        level: 0,
-                        world: world,
-                    };
-                },
-                createInvaders: function(game) {
-                    game.invaders = InvadersHandler.create(Invader.create(game.level));
-                    World.add(game.world, game.invaders);
-                    return game;
-                },
-                createShip: function(game) {
-                    game.ship = ShipHandler.create(Ship.create(160, 360));
-                    World.add(game.world, game.ship);
-                    Events.trigger(game, 'AfterShipCreation', { ship: game.ship });
-                },
-                increaseLevel: function(game) {
-                    game.level += 1;
-                    return game;
-                },
-                moveInvaders: function(game) {
-                    InvadersHandler.move(game.invaders, (game.level * 0.3) + 1);
-                },
-                reset: function(game) {
-                    game.level = 0;
-                    World.clear(game.world, false, true);
-                    return game;
-                }
-            };
-        })();
+        // var GameWorld = (function() {
+        //     return {
+        //         create: function(world) {
+        //             return {
+        //                 level: 0,
+        //                 world: world,
+        //             };
+        //         },
+        //         createInvaders: function(game) {
+        //             game.invaders = InvadersHandler.create(Invader.create(game.level));
+        //             World.add(game.world, game.invaders);
+        //             return game;
+        //         },
+        //         createShip: function(game) {
+        //             game.ship = ShipHandler.create(Ship.create(160, 360));
+        //             World.add(game.world, game.ship);
+        //             Events.trigger(game, 'AfterShipCreation', { ship: game.ship });
+        //         },
+        //         increaseLevel: function(game) {
+        //             game.level += 1;
+        //             return game;
+        //         },
+        //         moveInvaders: function(game) {
+        //             InvadersHandler.move(game.invaders, (game.level * 0.3) + 1);
+        //         },
+        //         reset: function(game) {
+        //             game.level = 0;
+        //             World.clear(game.world, false, true);
+        //             return game;
+        //         }
+        //     };
+        // })();
 
 
         Engine.run(engine);
