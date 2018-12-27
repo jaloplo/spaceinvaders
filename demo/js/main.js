@@ -1,5 +1,5 @@
-requirejs(['matter.min', 'core/Invader', 'core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
-    function(Matter, Invader, Score, TimeManager, View, ScoreDisplay) {
+requirejs(['matter.min', 'core/Bullet', 'core/Invader', 'core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
+    function(Matter, Bullet, Invader, Score, TimeManager, View, ScoreDisplay) {
         var Body = Matter.Body,
             Bodies = Matter.Bodies,
             Composite = Matter.Composite,
@@ -98,23 +98,6 @@ requirejs(['matter.min', 'core/Invader', 'core/Score', 'time/TimeManager','ui/Vi
                     BulletHandler.add(handler.bullets, bullet);
                     Body.setVelocity(bullet, { x: 0, y: 5 });
                 }
-            };
-        })();
-
-        // Represents a bullet in the system
-        var Bullet = (function () {
-            return {
-                create: function (x, y) {
-                    return Bodies.circle(x, y, 3, {
-                        disabled: false,
-                        label: 'bullet',
-                        isSensor: true
-                    });
-                },
-                deactivate: function (bullet) {
-                    bullet.disabled = true;
-                    return bullet;
-                },
             };
         })();
 
