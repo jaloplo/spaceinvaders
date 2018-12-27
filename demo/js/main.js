@@ -1,14 +1,18 @@
-requirejs(['matter.min', 'core/Bullet', 'core/Invader', 'core/Score', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
-    function(Matter, Bullet, Invader, Score, TimeManager, View, ScoreDisplay) {
-        var Body = Matter.Body,
-            Bodies = Matter.Bodies,
-            Composite = Matter.Composite,
-            Composites = Matter.Composites,
-            Engine = Matter.Engine,
+requirejs(['matter.min', 'core/Core', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
+    function(Matter, Core, TimeManager, View, ScoreDisplay) {
+        var Engine = Matter.Engine,
             Events = Matter.Events,
             Query = Matter.Query,
             Render = Matter.Render,
             World = Matter.World;
+
+        var Bullet = Core.Bullet,
+            BulletHandler = Core.BulletHandler,
+            Invader = Core.Invader,
+            InvadersHandler = Core.InvadersHandler,
+            Score = Core.Score,
+            Ship = Core.Ship
+            ShipHandler = Core.ShipHandler;
 
         // engine and world creation
         var engine = Engine.create({
@@ -61,131 +65,6 @@ requirejs(['matter.min', 'core/Bullet', 'core/Invader', 'core/Score', 'time/Time
                     return Query.region(bodies, bullet.bounds);
                 },
             };
-        })();
-
-        // Represents a handler to manage aliens
-        var InvadersHandler = (function () {
-            return {
-                create: function (invaders) {
-                    var handler = Composite.create({
-                        bullets: BulletHandler.create(),
-                        direction: -1,
-                        invaders: invaders,
-                    });
-
-                    Composite.add(handler, handler.bullets);
-                    Composite.add(handler, invaders);
-
-                    return handler;
-                },
-                fall: function (handler) {
-                    handler.invaders.bodies.forEach(function (invader) {
-                        Body.setPosition(invader, { x: invader.position.x, y: invader.position.y + 10 });
-                    });
-                },
-                move: function (handler, delta) {
-                    handler.invaders.bodies.forEach(function (invader) {
-                        Body.setVelocity(invader, {
-                            x: handler.direction * delta,
-                            y: invader.velocity.y
-                        });
-                    });
-                },
-                shoot: function (handler) {
-                    var randomInvadersIndex = Math.floor(Math.random() * handler.invaders.bodies.length);
-                    var invader = handler.invaders.bodies[randomInvadersIndex];
-                    var bullet = Bullet.create(invader.position.x, invader.position.y);
-                    BulletHandler.add(handler.bullets, bullet);
-                    Body.setVelocity(bullet, { x: 0, y: 5 });
-                }
-            };
-        })();
-
-        // Represents a handler to manage bullets that are out of the world
-        var BulletHandler = (function () {
-            return {
-                add: function (handler, bullet) {
-                    Composite.add(handler, bullet);
-                    return handler;
-                },
-                create: function () {
-                    return Composite.create({
-                        label: 'bullet handler'
-                    });
-                },
-                review: function (handler) {
-                    // while(handler.bodies[0].position.y < 0) {
-                    //     Composite.remove(handler, handler.bodies[0]);
-                    // }
-                    var indexToRemove = [];
-                    for (var i = 0; i < handler.bodies.length; i++) {
-                        if (handler.bodies[i].position.y < 0) {
-                            indexToRemove.push(i);
-                        } else if (handler.bodies[i].disabled) {
-                            indexToRemove.push(i);
-                        }
-                    }
-                    while (indexToRemove.length > 0) {
-                        var index = indexToRemove.pop();
-                        Composite.remove(handler, handler.bodies[index]);
-                    }
-                },
-            };
-        })();
-
-        // Represents the ship in the system
-        var Ship = (function () {
-            return {
-                create: function (x, y) {
-                    return Bodies.rectangle(x, y, 80, 20, {
-                        label: 'ship',
-                        inertia: Infinity,
-                    });
-                },
-            };
-        })();
-
-        // Represents a handler to manage ship actions
-        var ShipHandler = (function () {
-
-            var shipid = null;
-
-            var _getShip = function (handler) {
-                return Composite.get(handler, shipid, 'body');
-            }
-
-            var that = {
-                create: function (ship) {
-                    shipid = ship.id;
-
-                    var handler = Composite.create({
-                        label: 'ship handler',
-                        bullets: BulletHandler.create(),
-                    });
-
-                    Composite.add(handler, ship);
-                    Composite.add(handler, handler.bullets);
-
-                    return handler;
-                },
-                getShip: function (handler) {
-                    return Composite.get(handler, shipid, 'body');
-                },
-                move: function (handler, x) {
-                    var ship = _getShip(handler);
-                    Body.setVelocity(ship, { x: x, y: 0 });
-                },
-                shoot: function (handler, bulletslimit) {
-                    if(handler.bullets.bodies.length < bulletslimit) {
-                        var ship = _getShip(handler);
-                        var bullet = Bullet.create(ship.position.x, ship.position.y);
-                        BulletHandler.add(handler.bullets, bullet);
-                        Body.setVelocity(bullet, { x: 0, y: -10 });
-                    }
-                }
-            };
-
-            return that;
         })();
 
         // Represents a handler for the user keyboard interactions
