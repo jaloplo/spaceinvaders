@@ -1,5 +1,5 @@
-requirejs(['matter.min', 'core/Core', 'actions/Actions', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
-    function(Matter, Core, Actions, TimeManager, View, ScoreDisplay) {
+requirejs(['matter.min', 'core/Core', 'collisions/Collider', 'actions/Actions', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
+    function(Matter, Core, Collider, Actions, TimeManager, View, ScoreDisplay) {
         var Engine = Matter.Engine,
             Events = Matter.Events,
             Query = Matter.Query,
@@ -39,36 +39,6 @@ requirejs(['matter.min', 'core/Core', 'actions/Actions', 'time/TimeManager','ui/
                 wireframes: false
             }
         });
-
-
-        // Represents collisions between objects in the system
-        var Collider = (function () {
-            return {
-                leftborder: function (bodies) {
-                    var collision = Query.ray(
-                        bodies,
-                        { x: 0, y: 0 },
-                        { x: 0, y: 400 });
-
-                    return collision && collision.length > 0;
-                },
-                rightborder: function (bodies) {
-                    var collision = Query.ray(
-                        bodies,
-                        { x: 400, y: 0 },
-                        { x: 400, y: 400 });
-
-                    return collision && collision.length > 0;
-                },
-                hit: function (bullet, bodies) {
-                    var collisions = Query.region(bodies, bullet.bounds);
-                    return collisions && collisions.length > 0;
-                },
-                hurt: function (bullet, bodies) {
-                    return Query.region(bodies, bullet.bounds);
-                },
-            };
-        })();
 
         var GameWorld = (function() {
             return {
