@@ -1,5 +1,5 @@
-requirejs(['matter.min', 'core/Core', 'actions/KeyboardListener', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
-    function(Matter, Core, KeyboardListener, TimeManager, View, ScoreDisplay) {
+requirejs(['matter.min', 'core/Core', 'actions/Actions', 'time/TimeManager','ui/View', 'ui/ScoreDisplay'],
+    function(Matter, Core, Actions, TimeManager, View, ScoreDisplay) {
         var Engine = Matter.Engine,
             Events = Matter.Events,
             Query = Matter.Query,
@@ -13,6 +13,9 @@ requirejs(['matter.min', 'core/Core', 'actions/KeyboardListener', 'time/TimeMana
             Score = Core.Score,
             Ship = Core.Ship
             ShipHandler = Core.ShipHandler;
+
+        var KeyboardListener = Actions.KeyboardListener,
+            UserActions = Actions.UserActions;
 
         // engine and world creation
         var engine = Engine.create({
@@ -63,44 +66,6 @@ requirejs(['matter.min', 'core/Core', 'actions/KeyboardListener', 'time/TimeMana
                 },
                 hurt: function (bullet, bodies) {
                     return Query.region(bodies, bullet.bounds);
-                },
-            };
-        })();
-
-        // Represents the actions of a user
-        var UserActions = (function () {
-            return {
-                create: function (listener) {
-                    return {
-                        listener: listener,
-                    };
-                },
-                run: function(useractions) {
-                    if(useractions.listener.keys.indexOf('ArrowDown') > -1) {
-                            useractions.down();
-                    }
-                    var leftIndex = useractions.listener.keys.indexOf('ArrowLeft');
-                    var rightIndex = useractions.listener.keys.indexOf('ArrowRight');
-                    if(leftIndex > -1 || rightIndex > -1) {
-                        if(leftIndex > rightIndex) {
-                            useractions.left();
-                        }
-                        if(rightIndex > leftIndex) {
-                            useractions.right();
-                        }
-                    }
-                },
-                registerDown: function (useractions, callback) {
-                    useractions.down = callback;
-                    return useractions;
-                },
-                registerLeft: function (useractions, callback) {
-                    useractions.left = callback;
-                    return useractions;
-                },
-                registerRight: function (useractions, callback) {
-                    useractions.right = callback;
-                    return useractions;
                 },
             };
         })();
